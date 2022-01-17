@@ -32,7 +32,17 @@ const resolvers = {
         if(!user) {
             throw new AuthenticationError('Incorrect credentials');
         }
-        
-    }
+
+        const correctPW = await user.isCorrectPassword(password);
+
+        if(!correctPW) {
+            throw new AuthenticationError('Incorrect credentials');
+        }
+
+        const token = signToken(user);
+        return {token, user};
+    },
+
+    
 
 }
