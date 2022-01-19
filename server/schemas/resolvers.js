@@ -23,26 +23,52 @@ const resolvers = {
                 const token = signToken(user);
 
                 return { token, user };
+            },
+
+        login: async (parent, { email, password }) => {
+            const user = await User.findOne({ email });
+
+            if (!user) {
+                throw new AuthenticationError('Incorrect credentials');
             }
-    },
 
-    login: async (parent, {email, password}) => {
-        const user = await User.findOne({email});
+            const correctPW = await user.isCorrectPassword(password);
 
-        if(!user) {
-            throw new AuthenticationError('Incorrect credentials');
+            if (!correctPW) {
+                throw new AuthenticationError('Incorrect credentials');
+            }
+
+            const token = signToken(user);
+            return { token, user };
+        },
+
+        saveBook: async (parent, args, context) => {
+            if (context.user) {
+                const udpadteUser = await User.findbyIdAndUpdate(
+                    { _id: context.user_id },
+                    { $addToSet: { savedBooks: args.input } },
+                    { new: true }
+                );
+                return udpadteUser;
+            }
+
+            throw new AuthenticationError('You need to be logged in.')
+        },
+
+        removeBook: async (parent, args, context) => {
+            if (context.user) {
+                const udpadteUser = await User.findbyIdAndUpdate(
+                    { _id: context.user_id },
+                    { $pull: { savedBooks: args.input } },
+                    { new: true }
+                );
+                return udpadteUser;
+            }
+
+            throw new AuthenticationError('You need to be logged in.')
         }
 
-        const correctPW = await user.isCorrectPassword(password);
+    }
+};
 
-        if(!correctPW) {
-            throw new AuthenticationError('Incorrect credentials');
-        }
-
-        const token = signToken(user);
-        return {token, user};
-    },
-
-    
-
-}
+module.exports = resolvers;
