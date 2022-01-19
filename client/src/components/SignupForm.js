@@ -3,7 +3,7 @@ import { useMutation } from '@apollo/react-hooks'
 import { Form, Button, Alert } from 'react-bootstrap';
 
 import { ADD_USER } from '../utils/mutations';
-import Auth from '../utils/Auth';
+import Auth from '../utils/auth';
 
 const SignupForm = () => {
   // set initial form state
