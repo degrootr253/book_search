@@ -21,10 +21,16 @@ const LoginForm = () => {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
+    // const form = event.currentTarget;
+    // if (form.checkValidity() === false) {
+    //   event.preventDefault();
+    //   event.stopPropagation();
+    // }
+
     try {
       const { data } = await loginUser({variables: { ...userFormData }});
 
-      Auth.login(data.addUser.token)
+      Auth.login(data.login.token);
 
     } catch (err) {
       console.error(err);
