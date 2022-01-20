@@ -4,7 +4,7 @@ export const LOGIN_USER = gql`
 mutation loginUser($email: String!, $password: String!) {
     login(email: $email, password: $password) {
         token
-        user {
+        User {
             _id
         }
     }
@@ -63,7 +63,7 @@ mutation removeBook($bookId: ID!) {
         email
         bookCount
         savedBooks {
-            # _id
+            _id
             bookId
             authors
             image
